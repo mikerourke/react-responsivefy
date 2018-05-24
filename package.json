@@ -1,0 +1,77 @@
+{
+  "name": "react-responsivefy",
+  "version": "0.0.1",
+  "description": "React component for responsivefying SVG.",
+  "main": "src/index.js",
+  "repository": "https://github.com/mikerourke/react-responsivefy.git",
+  "author": "Mike Rourke <mike.w.rourke@gmail.com>",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "storybook": "start-storybook -p 9001 -c .storybook",
+    "build-storybook": "build-storybook -o ./.out"
+  },
+  "dependencies": {
+    "prop-types": "^15.6.1"
+  },
+  "devDependencies": {
+    "@storybook/react": "^3.4.5",
+    "babel-core": "^6.26.3",
+    "babel-eslint": "^8.2.3",
+    "babel-jest": "^22.4.4",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-react-jsx": "^6.24.1",
+    "babel-preset-env": "^1.7.0",
+    "babel-runtime": "^6.26.0",
+    "d3": "^5.4.0",
+    "eslint": "^4.19.1",
+    "eslint-plugin-react": "^7.8.2",
+    "jest": "^22.4.4",
+    "prettier": "^1.12.1",
+    "react": "^16.3.2",
+    "react-dom": "^16.3.2",
+    "react-test-renderer": "^16.3.2"
+  },
+  "peerDependencies": {
+    "react": "^15.0.0 || ^16.0.0",
+    "react-dom": "^15.0.0 || ^16.0.0"
+  },
+  "prettier": {
+    "bracketSpacing": true,
+    "singleQuote": true,
+    "trailingComma": "all"
+  },
+  "babel": {
+    "presets": [
+      [
+        "env",
+        {
+          "targets": {
+            "node": "current"
+          }
+        }
+      ]
+    ],
+    "plugins": [
+      "transform-class-properties",
+      "transform-react-jsx"
+    ]
+  },
+  "eslintConfig": {
+    "parser": "babel-eslint",
+    "env": {
+      "es6": true,
+      "browser": true
+    },
+    "plugins": [
+      "react"
+    ],
+    "parserOptions": {
+      "ecmaVersion": 6,
+      "sourceType": "module",
+      "ecmaFeatures": {
+        "jsx": true
+      }
+    }
+  }
+}
