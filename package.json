@@ -8,9 +8,9 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "start": "NODE_ENV=development parcel example/index.html -d docs/",
+    "start": "NODE_ENV=development parcel example/index.html -d .localexample/ --open",
     "predoc": "rm -rf ./docs",
-    "doc": "NODE_ENV=production parcel build index.html --no-minify --public-url / -d docs/",
+    "doc": "NODE_ENV=production parcel build example/index.html --no-source-maps --public-url / -d docs/",
     "build": "",
     "test": "node config/test.js"
   },

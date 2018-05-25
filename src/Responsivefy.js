@@ -26,16 +26,21 @@ export default class Responsivefy extends React.Component {
   constructor(props) {
     super(props);
     const { width, height } = this.props;
-    this.aspect = +width / +height;
     this.state = {
       currentWidth: +width,
       currentHeight: +height,
+      aspect: +width / +height,
     };
   }
 
   componentDidMount() {
     window.addEventListener('resize', this.resize);
     this.resize();
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { width, height } = nextProps;
+    this.setState({ aspect: +width / +height });
   }
 
   componentWillUnmount() {
@@ -48,14 +53,9 @@ export default class Responsivefy extends React.Component {
       .getPropertyValue('width');
     if (!widthInPixels) return;
 
-    let updatedWidth = parseInt(widthInPixels, 10);
-    let updatedHeight = Math.round(updatedWidth / this.aspect);
-
-    const windowHeight = window.innerHeight;
-    if (updatedHeight >= windowHeight) {
-      updatedHeight = windowHeight;
-      updatedWidth = Math.round(updatedHeight * this.aspect);
-    }
+    const updatedWidth = parseInt(widthInPixels, 10);
+    console.log(updatedWidth);
+    const updatedHeight = Math.round(updatedWidth / this.state.aspect);
 
     this.setState({ currentWidth: updatedWidth, currentHeight: updatedHeight });
   };

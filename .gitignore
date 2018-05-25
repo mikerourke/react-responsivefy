@@ -64,4 +64,5 @@ typings/
 
 /.cache/
 /lib/
-/coverage/
+/.localexample/
+/docs/*.map

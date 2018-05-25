@@ -1,5 +1,4 @@
 import React from 'react';
-import InfoModal from './InfoModal';
 
 const defaultDimensions = {
   width: 600,
@@ -44,7 +43,7 @@ export default class Toolbar extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = { ...this.getDimensionValues(this.props), modalOpen: false };
+    this.state = this.getDimensionValues(this.props);
   }
 
   getDimensionValues = source => ({
@@ -73,7 +72,6 @@ export default class Toolbar extends React.Component {
       if (modifierPressed) return this.handleResetClick();
       this.handleUpdateClick();
     }
-    if (/Esc/g.test(event.code)) this.setState({ modalOpen: true });
   };
 
   handleInputUpdate = key => event => {
@@ -119,14 +117,14 @@ export default class Toolbar extends React.Component {
   );
 
   render() {
-    const marginItems = [
+    const inputItems = [
+      { key: 'width', display: 'Width' },
+      { key: 'height', display: 'Height' },
       { key: 'top', display: 'Top' },
       { key: 'bottom', display: 'Bottom' },
       { key: 'left', display: 'Left' },
       { key: 'right', display: 'Right' },
     ];
-
-    const { width, height } = this.state;
 
     const getFlex = (alignItems, justifyContent) => ({
       display: 'flex',
@@ -135,84 +133,50 @@ export default class Toolbar extends React.Component {
     });
 
     return (
-      <React.Fragment>
-        <InfoModal
-          open={this.state.modalOpen}
-          onClose={() => this.setState({ modalOpen: false })}
-        />
-        <div className="column col-12" style={{ height: 104 }}>
-          <div className="columns">
-            <div className="column col-12">
-              <div className="columns">
-                <div className="column col-6">
-                  <h2 style={{ margin: 0, lineHeight: 'unset' }}>
-                    react-responsivefy
-                  </h2>
-                </div>
-                <div
-                  className="column col-6"
-                  style={getFlex('center', 'flex-end')}
+      <div className="column col-12" style={{ height: 104 }}>
+        <div className="columns">
+          <div className="column col-12">
+            <div className="columns">
+              <div className="column col-6">
+                <h2 style={{ margin: 0, lineHeight: 'unset' }}>
+                  react-responsivefy
+                </h2>
+              </div>
+              <div
+                className="column col-6"
+                style={getFlex('center', 'flex-end')}
+              >
+                <a
+                  style={{ cursor: 'pointer' }}
+                  onClick={this.props.onShowHelpClick}
                 >
-                  <div>
-                    <small
-                      className="label label-success label-rounded"
-                      style={{ margin: '0 8' }}
-                    >
-                      Press Enter to Update
-                    </small>
-                  </div>
-                  <div>
-                    <small
-                      className="label label-warning label-rounded"
-                      style={{ margin: '0 8' }}
-                    >
-                      Press ⌘ + Enter to Reset
-                    </small>
-                  </div>
-                </div>
+                  Need help?
+                </a>
               </div>
             </div>
-            <div className="form-group column col-12">
-              <div className="columns">
-                {this.renderInputItem({ key: 'width', display: 'Width' })}
-                {this.renderInputItem({ key: 'height', display: 'Height' })}
-                <div
-                  className="label bg-primary"
-                  style={{
-                    alignSelf: 'flex-end',
-                    fontSize: 16,
-                    height: '1.4rem',
-                    minWidth: 64,
-                    textAlign: 'center',
-                    ...getFlex('center', 'center'),
-                  }}
+          </div>
+          <div className="form-group column col-12">
+            <div className="columns">
+              {inputItems.map(inputItem => this.renderInputItem(inputItem))}
+              <div className="column" style={getFlex('flex-end', 'flex-start')}>
+                <button
+                  className="btn btn-primary btn-sm actionButton"
+                  onClick={this.handleUpdateClick}
+                  style={{ marginRight: 8 }}
                 >
-                  {getAspectRatio(width, height)}
-                </div>
-                {marginItems.map(inputItem => this.renderInputItem(inputItem))}
-                <div
-                  className="column"
-                  style={getFlex('flex-end', 'flex-start')}
+                  Update
+                </button>
+                <button
+                  className="btn btn-primary btn-sm actionButton"
+                  onClick={this.handleResetClick}
                 >
-                  <button
-                    className="btn btn-primary btn-sm actionButton"
-                    onClick={this.handleUpdateClick}
-                    style={{ marginRight: 8 }}
-                  >
-                    Update
-                  </button>
-                  <button
-                    className="btn btn-primary btn-sm actionButton"
-                    onClick={this.handleResetClick}
-                  >
-                    Reset
-                  </button>
-                </div>
+                  Reset
+                </button>
               </div>
             </div>
           </div>
         </div>
-      </React.Fragment>
+      </div>
     );
   }
 }
