@@ -8,25 +8,31 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "storybook": "start-storybook -p 9001 -c .storybook",
-    "build-storybook": "build-storybook -o ./.out"
+    "start": "NODE_ENV=development parcel example/index.html -d docs/",
+    "predoc": "rm -rf ./docs",
+    "doc": "NODE_ENV=production parcel build index.html --no-minify --public-url / -d docs/",
+    "build": "",
+    "test": "node config/test.js"
   },
   "dependencies": {
     "prop-types": "^15.6.1"
   },
   "devDependencies": {
-    "@storybook/react": "^3.4.5",
     "babel-core": "^6.26.3",
     "babel-eslint": "^8.2.3",
     "babel-jest": "^22.4.4",
     "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-plugin-transform-react-jsx": "^6.24.1",
     "babel-preset-env": "^1.7.0",
-    "babel-runtime": "^6.26.0",
     "d3": "^5.4.0",
+    "enzyme": "^3.3.0",
+    "enzyme-adapter-react-16": "^1.1.1",
+    "enzyme-to-json": "^3.3.4",
     "eslint": "^4.19.1",
     "eslint-plugin-react": "^7.8.2",
     "jest": "^22.4.4",
+    "parcel-bundler": "^1.8.1",
     "prettier": "^1.12.1",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
@@ -53,6 +59,7 @@
       ]
     ],
     "plugins": [
+      "transform-object-rest-spread",
       "transform-class-properties",
       "transform-react-jsx"
     ]
@@ -61,7 +68,8 @@
     "parser": "babel-eslint",
     "env": {
       "es6": true,
-      "browser": true
+      "browser": true,
+      "jest": true
     },
     "plugins": [
       "react"

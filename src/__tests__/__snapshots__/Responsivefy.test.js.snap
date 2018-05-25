@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Responsivefy Tests when passed valid props it renders and matches snapshot when margins are not specified 1`] = `
+<svg
+  height="400"
+  preserveAspectRatio="xMinYMid"
+  viewBox="0 0 620 420"
+  width="600"
+>
+  <g
+    transform="translate(10, 10)"
+  >
+    <rect
+      height="100"
+      width="100"
+      x="12"
+      y="10"
+    />
+  </g>
+</svg>
+`;
+
+exports[`Responsivefy Tests when passed valid props it renders and matches snapshot when margins are specified 1`] = `
+<svg
+  height="400"
+  preserveAspectRatio="xMinYMid"
+  viewBox="0 0 640 440"
+  width="600"
+>
+  <g
+    transform="translate(20, 20)"
+  >
+    <rect
+      height="100"
+      width="100"
+      x="12"
+      y="10"
+    />
+  </g>
+</svg>
+`;

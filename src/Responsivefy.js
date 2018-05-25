@@ -28,8 +28,8 @@ export default class Responsivefy extends React.Component {
     const { width, height } = this.props;
     this.aspect = +width / +height;
     this.state = {
-      width: +width,
-      height: +height,
+      currentWidth: +width,
+      currentHeight: +height,
     };
   }
 
@@ -46,9 +46,18 @@ export default class Responsivefy extends React.Component {
     const widthInPixels = window
       .getComputedStyle(this.ref.parentNode, null)
       .getPropertyValue('width');
-    const updatedWidth = parseInt(widthInPixels, 10);
-    const updatedHeight = Math.round(updatedWidth / this.aspect);
-    this.setState({ width: updatedWidth, height: updatedHeight });
+    if (!widthInPixels) return;
+
+    let updatedWidth = parseInt(widthInPixels, 10);
+    let updatedHeight = Math.round(updatedWidth / this.aspect);
+
+    const windowHeight = window.innerHeight;
+    if (updatedHeight >= windowHeight) {
+      updatedHeight = windowHeight;
+      updatedWidth = Math.round(updatedHeight * this.aspect);
+    }
+
+    this.setState({ currentWidth: updatedWidth, currentHeight: updatedHeight });
   };
 
   handleRef = element => (this.ref = element);
@@ -61,8 +70,8 @@ export default class Responsivefy extends React.Component {
 
     return (
       <svg
-        width={this.state.width}
-        height={this.state.height}
+        width={this.state.currentWidth}
+        height={this.state.currentHeight}
         viewBox={`0 0 ${fullWidth} ${fullHeight}`}
         preserveAspectRatio="xMinYMid"
         ref={this.handleRef}

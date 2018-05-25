@@ -1,7 +1,10 @@
+/**
+ * The data and chart code for this component was taken from a lesson in the
+ * Build Interactive JavaScript Charts with D3 v4 course on egghead.io.
+ * @see https://egghead.io/courses/build-interactive-javascript-charts-with-d3-v4
+ */
 import React from 'react';
-import { storiesOf } from '@storybook/react';
 import * as d3 from 'd3';
-import Responsivefy from '../src';
 
 const data = [
   {
@@ -144,71 +147,85 @@ const data = [
   },
 ];
 
-const ExampleChart = ({ width, height }) => {
-  const parseTime = d3.timeParse('%Y/%m/%d');
+export default class ExampleChart extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      validData: this.getValidData(),
+    };
+  }
 
-  data.forEach(company => {
-    company.values.forEach(d => {
-      d.date = parseTime(d.date);
-      d.close = +d.close;
+  componentDidMount() {
+    setTimeout(() => this.renderChart(), 0);
+  }
+
+  componentDidUpdate() {
+    setTimeout(() => this.renderChart(), 0);
+  }
+
+  /**
+   * Returns data with time parsed and numerical close values to ensure data
+   * is valid prior to charting.
+   */
+  getValidData = () => {
+    const parseTime = d3.timeParse('%Y/%m/%d');
+
+    return data.map(({ ticker, values }) => {
+      const updatedValues = values.map(d => ({
+        date: parseTime(d.date),
+        close: +d.close,
+      }));
+
+      return {
+        ticker,
+        values: updatedValues,
+      };
     });
-  });
+  };
 
-  const xScale = d3
-    .scaleTime()
-    .domain([
-      d3.min(data, co => d3.min(co.values, d => d.date)),
-      d3.max(data, co => d3.max(co.values, d => d.date)),
-    ])
-    .range([0, width]);
-  const xAxis = d3.axisBottom(xScale).ticks(5);
+  renderChart = () => {
+    const { height, width } = this.props;
 
-  const yScale = d3
-    .scaleLinear()
-    .domain([
-      d3.min(data, co => d3.min(co.values, d => d.close)),
-      d3.max(data, co => d3.max(co.values, d => d.close)),
-    ])
-    .range([height, 0]);
-  const yAxis = d3.axisLeft(yScale);
+    const wrapper = d3.select(this.ref.parentNode);
+    wrapper.selectAll('*').remove();
 
-  const line = d3
-    .line()
-    .x(d => xScale(d.date))
-    .y(d => yScale(d.close))
-    .curve(d3.curveCatmullRom.alpha(0.5));
+    const xScale = d3
+      .scaleTime()
+      .domain([new Date(2016, 6, 1), new Date(2016, 8, 30)])
+      .range([0, width]);
 
-  return (
-    <g>
-      <g
-        ref={element => d3.select(element).call(xAxis)}
-        transform={`translate(0, ${height})`}
-      />
-      <g ref={element => d3.select(element).call(yAxis)} />
-      {data.map(({ ticker, values }, idx) => (
-        <path
-          key={ticker}
-          d={line(values)}
-          stroke={['#FF9900', '#3369e8'][idx]}
-          strokeWidth={2}
-          fill="none"
-        />
-      ))}
-    </g>
-  );
-};
+    wrapper
+      .append('g')
+      .attr('transform', `translate(0, ${height})`)
+      .call(d3.axisBottom(xScale).ticks(5));
 
-const width = 600;
-const height = 400;
-const margin = { top: 10, right: 10, bottom: 30, left: 30 };
+    const yScale = d3
+      .scaleLinear()
+      .domain([695, 838])
+      .range([height, 0]);
 
-storiesOf('Responsivefy', module).add('D3 Chart Example', () => (
-  <div>
-    <Responsivefy height={400} width={width} margin={margin}>
-      <ExampleChart
-        height={height - margin.top - margin.bottom}
-        width={width - margin.left - margin.right}
-      />
-    </Responsivefy>
-  </div>
-));
+    wrapper.append('g').call(d3.axisLeft(yScale));
+
+    const line = d3
+      .line()
+      .x(d => xScale(d.date))
+      .y(d => yScale(d.close));
+
+    wrapper
+      .selectAll('.line')
+      .data(this.state.validData)
+      .enter()
+      .append('path')
+      .attr('class', 'line')
+      .attr('d', d => line(d.values))
+      .style('stroke', (d, i) => ['#FF9900', '#3369e8'][i])
+      .style('stroke-width', 2)
+      .style('fill', 'none');
+  };
+
+  handleRef = element => (this.ref = element);
+
+  render() {
+    return <g ref={this.handleRef} />;
+  }
+}
